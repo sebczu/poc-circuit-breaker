@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.util.stream.IntStream;
+
 import static io.github.resilience4j.circuitbreaker.CircuitBreaker.State.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -75,21 +77,21 @@ public class DataRestControllerTest {
   }
 
   private void sendOk(int count) {
-    for (int i=0; i<count; i++) {
+    IntStream.range(0, count).forEach(i -> {
       webClient.get()
         .uri(URL_OK)
         .exchange()
         .expectStatus().isOk();
-    }
+    });
   }
 
   private void sendError(int count) {
-    for (int i=0; i<count; i++) {
+    IntStream.range(0, count).forEach(i -> {
       webClient.get()
         .uri(URL_ERROR)
         .exchange()
         .expectStatus().is5xxServerError();
-    }
+    });
   }
 
   @SneakyThrows
